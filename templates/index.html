@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iris Flower Predictor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f9fc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    header {
+      width: 100%;
+      max-width: 960px;
+      padding: 20px;
+      text-align: center;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 32px;
+      background: linear-gradient(to right, #4f46e5, #9333ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .form-card {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-card label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .form-card input {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      margin-bottom: 16px;
+    }
+
+    .form-card input:focus {
+      border-color: #6366f1;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(to right, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #ecfdf5;
+      color: #047857;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #9ca3af;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌸 Iris Flower Predictor</h1>
+    <p>Enter flower measurements to predict the species</p>
+  </header>
+
+  <form id="predictForm">
+    <div class="container">
+      <div class="form-card">
+        <label for="sepal_length">Sepal Length (cm)</label>
+        <input type="number" name="sepal_length" id="sepal_length" step="0.1" min="0" required />
+
+        <label for="sepal_width">Sepal Width (cm)</label>
+        <input type="number" name="sepal_width" id="sepal_width" step="0.1" min="0" required />
+      </div>
+
+      <div class="form-card">
+        <label for="petal_length">Petal Length (cm)</label>
+        <input type="number" name="petal_length" id="petal_length" step="0.1" min="0" required />
+
+        <label for="petal_width">Petal Width (cm)</label>
+        <input type="number" name="petal_width" id="petal_width" step="0.1" min="0" required />
+
+        <button type="submit" class="btn">🔮 Predict</button>
+      </div>
+    </div>
+  </form>
+
+  <div id="result" class="result" style="display:none;"></div>
+
+  <footer>
+    &copy; 2025 Iris Predictor. All rights reserved.
+  </footer>
+
+  <script>
+    const form = document.getElementById('predictForm');
+    const resultBox = document.getElementById('result');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const sl = parseFloat(data.get('sepal_length'));
+      const sw = parseFloat(data.get('sepal_width'));
+      const pl = parseFloat(data.get('petal_length'));
+      const pw = parseFloat(data.get('petal_width'));
+
+      if ([sl, sw, pl, pw].some(val => isNaN(val) || val <= 0)) {
+        resultBox.textContent = '⚠️ Please enter valid positive numbers.';
+        resultBox.style.background = '#fef2f2';
+        resultBox.style.color = '#b91c1c';
+        resultBox.style.display = 'block';
+        return;
+      }
+
+      let species = '';
+      if (pl < 2.5) {
+        species = 'Iris Setosa 🌸';
+      } else if (pl < 5.0) {
+        species = 'Iris Versicolor 🌼';
+      } else {
+        species = 'Iris Virginica 🌺';
+      }
+
+      resultBox.textContent = `✅ Predicted Species: ${species}`;
+      resultBox.style.background = '#ecfdf5';
+      resultBox.style.color = '#047857';
+      resultBox.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
